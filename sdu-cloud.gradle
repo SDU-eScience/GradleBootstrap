@@ -47,7 +47,7 @@ detekt {
     filters = ".*/resources/.*,.*/build/.*"
 
     // https://stackoverflow.com/a/921400
-    def currentVersion = "v0.2.4"
+    def currentVersion = "v0.2.5"
     URL website = new URL("https://raw.githubusercontent.com/SDU-eScience/GradleBootstrap/$currentVersion/detekt.yml")
     ReadableByteChannel rbc = Channels.newChannel(website.openStream())
     def outputFile = Files.createTempFile("detekt", ".yml").toFile()
@@ -266,15 +266,17 @@ dependencies {
 // Task creators and utilities are exported in sduCloud
 ext.sduCloud = ([
         createTasksForApiJar: { String name, List<String> dependencies ->
-            String createApiJarTaskName = "${name}ApiJar"
-            String publishApiJarTaskName = "${name}ApiJar"
+            logger.info("Hello!")
+            String nameWithDashes = name.replace('.', '-')
+            String createApiJarTaskName = "${nameWithDashes}ApiJar"
+            String publishApiJarTaskName = "${nameWithDashes}ApiJar"
 
             def apiJarTask = tasks.create(createApiJarTaskName, Jar) { task ->
-                task.baseName = name + '-api'
+                task.baseName = nameWithDashes + '-api'
                 task.from(sourceSets.main.output)
                 task.from(sourceSets.generated.output)
                 task.from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-                task.include("**/dk/sdu/cloud/$name/api/**")
+                task.include("**/dk/sdu/cloud/${name.replace('.', '/')}/api/**")
                 task.include("META-INF/**/${project.name}.kotlin_module")
                 task.includeEmptyDirs = false
                 task.with(jar)
@@ -285,7 +287,7 @@ ext.sduCloud = ([
             def publication = publishing.publications.create(publishApiJarTaskName, MavenPublication)
 
             publication.groupId = "dk.sdu.cloud"
-            publication.artifactId = "$name-api"
+            publication.artifactId = "$nameWithDashes-api"
             publication.artifact(apiJarTask)
 
             publication.pom.withXml {
