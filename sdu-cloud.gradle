@@ -266,7 +266,6 @@ dependencies {
 // Task creators and utilities are exported in sduCloud
 ext.sduCloud = ([
         createTasksForApiJar: { String name, List<String> dependencies ->
-            logger.info("Hello!")
             String nameWithDashes = name.replace('.', '-')
             String createApiJarTaskName = "${nameWithDashes}ApiJar"
             String publishApiJarTaskName = "${nameWithDashes}ApiJar"
