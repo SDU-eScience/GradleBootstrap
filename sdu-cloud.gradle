@@ -13,8 +13,8 @@ buildscript { // TODO Not how you should do stuff like this. Still works though.
     }
 
     setDefaultConfig("dokka_version", "0.9.17")
-    setDefaultConfig("ktor_version", "1.0.1")
-    setDefaultConfig("kotlin_version", "1.3.11")
+    setDefaultConfig("ktor_version", "1.1.2")
+    setDefaultConfig("kotlin_version", "1.3.20")
     setDefaultConfig("junit_version", "4.12")
     setDefaultConfig("mockk_version", "1.8.13.kotlin13")
 
@@ -47,7 +47,7 @@ detekt {
     filters = ".*/resources/.*,.*/build/.*"
 
     // https://stackoverflow.com/a/921400
-    def currentVersion = "v0.2.5"
+    def currentVersion = "v0.2.6"
     URL website = new URL("https://raw.githubusercontent.com/SDU-eScience/GradleBootstrap/$currentVersion/detekt.yml")
     ReadableByteChannel rbc = Channels.newChannel(website.openStream())
     def outputFile = Files.createTempFile("detekt", ".yml").toFile()
