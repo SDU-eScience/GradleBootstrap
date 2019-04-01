@@ -18,7 +18,7 @@ buildscript { // TODO Not how you should do stuff like this. Still works though.
     setDefaultConfig("junit_version", "4.12")
     setDefaultConfig("mockk_version", "1.8.13.kotlin13")
 
-    setDefaultConfig("ktor_engine", "cio")
+    setDefaultConfig("ktor_engine", "netty")
 }
 
 //
