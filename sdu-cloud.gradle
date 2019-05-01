@@ -47,7 +47,7 @@ detekt {
     filters = ".*/resources/.*,.*/build/.*"
 
     // https://stackoverflow.com/a/921400
-    def currentVersion = "v0.2.9"
+    def currentVersion = "v0.2.10"
     URL website = new URL("https://raw.githubusercontent.com/SDU-eScience/GradleBootstrap/$currentVersion/detekt.yml")
     ReadableByteChannel rbc = Channels.newChannel(website.openStream())
     def outputFile = Files.createTempFile("detekt", ".yml").toFile()
@@ -147,9 +147,11 @@ dependencies {
 // Testing
 //
 dependencies {
+    def withoutLogback = { exclude group: 'ch.qos.logback', module: 'logback-classic' }
+
     testCompile "junit:junit:4.12"
     testCompile "io.mockk:mockk:1.8"
-    testCompile "io.ktor:ktor-server-test-host:$ktor_version"
+    testCompile "io.ktor:ktor-server-test-host:$ktor_version", withoutLogback
     compile group: 'com.h2database', name: 'h2', version: '1.4.197'
 }
 
