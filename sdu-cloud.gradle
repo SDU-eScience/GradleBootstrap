@@ -140,7 +140,9 @@ publishing {
 // Ktor
 //
 dependencies {
-    compile group: 'io.ktor', name: "ktor-server-${ktor_engine}", version: "$ktor_version"
+    def withoutLogback = { exclude group: 'ch.qos.logback', module: 'logback-classic' }
+
+    compile group: 'io.ktor', name: "ktor-server-${ktor_engine}", version: "$ktor_version", withoutLogback
 }
 
 //
