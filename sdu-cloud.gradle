@@ -102,14 +102,14 @@ repositories {
     def password = System.getenv("ESCIENCE_MVN_PASSWORD") ?: eScienceCloudPassword
 
     maven {
-        url("https://app.dev.cloud.sdu.dk/archiva/repository/internal")
+        url("https://dev.cloud.sdu.dk/archiva/repository/internal")
         credentials {
             it.username(username)
             it.password(password)
         }
     }
     maven {
-        url("https://app.dev.cloud.sdu.dk/archiva/repository/snapshots")
+        url("https://dev.cloud.sdu.dk/archiva/repository/snapshots")
         credentials {
             it.username(username)
             it.password(password)
@@ -124,7 +124,7 @@ publishing {
 
     repositories {
         it.maven {
-            def resolvedUrl = "https://app.dev.cloud.sdu.dk/archiva/repository/"
+            def resolvedUrl = "https://dev.cloud.sdu.dk/archiva/repository/"
             if (project.version.endsWith("-SNAPSHOT")) resolvedUrl += "snapshots"
             else resolvedUrl += "internal"
             url(resolvedUrl)
