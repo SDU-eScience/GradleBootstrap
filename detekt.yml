@@ -58,7 +58,7 @@ comments:
     active: false
     endOfSentenceFormat: ([.?!][ \t\n\r\f<])|([.?!]$)
   UndocumentedPublicClass:
-    active: true
+    active: false
     searchInNestedClass: true
     searchInInnerClass: true
     searchInInnerObject: true
@@ -415,7 +415,7 @@ style:
     active: false
     maxJumpCount: 1
   MagicNumber:
-    active: true
+    active: false
     ignoreNumbers: '-1,0,1,2'
     ignoreHashCodeFunction: true
     ignorePropertyDeclaration: true
