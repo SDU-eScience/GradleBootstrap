@@ -41,7 +41,7 @@ buildscript {
     }
 }
 
-apply plugin: "io.gitlab.arturbosch.detekt"
+apply plugin: io.gitlab.arturbosch.detekt.DetektPlugin
 
 detekt {
     toolVersion = "$detekt_version"
