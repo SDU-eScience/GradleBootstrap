@@ -23,6 +23,10 @@ buildscript { // TODO Not how you should do stuff like this. Still works though.
     setDefaultConfig("ktor_engine", "netty")
 }
 
+repositories {
+    jcenter()
+}
+
 //
 // Build scripts
 //
