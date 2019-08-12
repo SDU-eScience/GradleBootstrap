@@ -247,3 +247,72 @@ task generateBuildConfig() {
     """.stripIndent().trim()
 }
 compileKotlin.dependsOn(generateBuildConfig)
+
+//
+// Dokka
+//
+apply plugin: org.jetbrains.dokka.gradle.DokkaPlugin
+
+dokka {
+    outputFormat = "html"
+    outputDirectory = "$buildDir/javadoc"
+}
+
+//
+// Logging
+//
+dependencies {
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: "$log4j_version"
+    compile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: "$log4j_version"
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: "$log4j_version"
+}
+
+// Task creators and utilities are exported in sduCloud
+ext.sduCloud = ([
+        createTasksForApiJar: { String name, List<String> dependencies ->
+            String nameWithDashes = name.replace('.', '-')
+            String createApiJarTaskName = "${nameWithDashes}ApiJar"
+            String publishApiJarTaskName = "${nameWithDashes}ApiJar"
+
+            def apiJarTask = tasks.create(createApiJarTaskName, Jar) { task ->
+                task.baseName = nameWithDashes + '-api'
+                task.from(sourceSets.main.output)
+                task.from(sourceSets.generated.output)
+                task.from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+                task.include("**/dk/sdu/cloud/${name.replace('.', '/')}/api/**")
+                task.include("META-INF/**/${project.name}.kotlin_module")
+                task.includeEmptyDirs = false
+                task.with(jar)
+            }
+
+            PublishingExtension publishing = publishing
+
+            def publication = publishing.publications.create(publishApiJarTaskName, MavenPublication)
+
+            publication.groupId = "dk.sdu.cloud"
+            publication.artifactId = "$nameWithDashes-api"
+            publication.artifact(apiJarTask)
+
+            publication.pom.withXml {
+                def dependenciesNode = it.asNode().appendNode("dependencies")
+
+                for (dep in dependencies) {
+                    def splitDependency = dep.split(":")
+
+                    if (splitDependency.length != 3) throw new IllegalArgumentException("Bad dependency: $dep")
+
+                    def depNode = dependenciesNode.appendNode("dependency")
+                    depNode.appendNode("groupId", splitDependency[0])
+                    depNode.appendNode("artifactId", splitDependency[1])
+                    depNode.appendNode("version", splitDependency[2])
+                }
+            }
+        }
+])
+
+run {
+    classpath sourceSets.generated.output
+    if (project.hasProperty("appArgs")) {
+        args Eval.me(appArgs)
+    }
+}
