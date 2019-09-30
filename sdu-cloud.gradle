@@ -310,3 +310,8 @@ run {
         args Eval.me(appArgs)
     }
 }
+
+test {
+    systemProperty("log4j2.configurationFactory", "dk.sdu.cloud.micro.Log4j2ConfigFactory")
+    systemProperty("java.io.tmpdir", System.getProperty("java.io.tmpdir"))
+}
